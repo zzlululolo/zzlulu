@@ -1,0 +1,55 @@
+#!/bin/bash
+
+basedir=/opt/tools/sysbb
+logdir=${basedir}/log
+node=`which node`
+npm=`which npm`
+slc=`which slc`
+
+__fixbug() {
+  cp ${basedir}/conf/wsdl.js ${basedir}/node_modules/loopback-connector-soap/node_modules/soap/lib/wsdl.js
+}
+
+__stop() {
+  cd ${basedir} && ${slc} runctl stop
+}
+
+__start() {
+  cd ${basedir} && \
+    ${slc} run --cluster cpus -d --pid ${logdir}/sysbb.pid -l ${logdir}/sysbb.log --no-profile
+}
+
+__status() {
+  cd ${basedir} && ${slc} runctl status
+}
+
+__restart() {
+  cd ${basedir} && ${slc} runctl restart
+}
+
+case "$1" in
+  start)
+    __start
+    # REVISIT: http://stackoverflow.com/questions/28212380/why-docker-container-exits-immediately
+    while true; do sleep 1000; done
+    ;;
+  stop)
+    __stop
+    ;;
+  restart)
+    __stop
+    __start
+    ;;
+  status)
+    __status
+    ;;
+  fixbug)
+    __fixbug
+    ;;
+  *)
+    echo $"Usage: sysbb {start|stop|restart|status}"
+    exit 1
+esac
+
+
+exit 0
