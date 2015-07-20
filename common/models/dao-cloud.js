@@ -3,7 +3,7 @@ module.exports = function(DaoCloud) {
     cb(null, 'Greetings DaoCloud');
   }
 
-  Person.remoteMethod(
+  DaoCloud.remoteMethod(
     'greet',
     {
       accepts: {arg: 'msg', type: 'string'},
