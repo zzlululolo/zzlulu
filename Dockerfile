@@ -25,10 +25,11 @@ RUN cd \
 ENV PATH $PATH:/opt/tools/nodejs/bin
 
 # set up cnpm
-RUN npm install cnpm -g --registry=https://registry.npm.taobao.org
+# RUN npm install cnpm -g --registry=https://registry.npm.taobao.org
 
 # install strongloop globally, use npm for non-China deployment
-RUN cnpm install -g strongloop
+# RUN cnpm install -g strongloop
+RUN npm install -g strongloop
 
 # set up project
 RUN mkdir -p /opt/tools/sysbb/log
@@ -37,6 +38,7 @@ ADD . /opt/tools/sysbb
 
 # install dependencies and fix bug, use npm for non-China deployment
 # RUN cd /opt/tools/sysbb && cnpm install && ./sysbb fixbug
+RUN cd /opt/tools/sysbb && npm install
 
 EXPOSE 3000
 
